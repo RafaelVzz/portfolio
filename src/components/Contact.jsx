@@ -2,6 +2,7 @@ import { useState } from "react";
 import { socialLinks } from "../data/portfolioData";
 import { escapeHtml, sanitizeUrl } from "../utils/sanitize";
 import { useInView } from "../hooks/useInView";
+import { isRequired, isEmail, minLength } from "../utils/validators";
 
 /**
  * Contact — Sección de contacto con formulario y prevención XSS.
@@ -10,6 +11,17 @@ import { useInView } from "../hooks/useInView";
  * del usuario antes de mostrarla. En producción, todos los datos enviados
  * por el usuario también deberían sanitizarse en el backend.
  */
+
+const ErrorMessage = ({ message }) => {
+  if (!message) return null;
+  return (
+    <p className="text-red-400 text-[11px] font-medium mt-1.5 flex items-center gap-1 animate-fade-in-up">
+      <span className="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
+      {message}
+    </p>
+  );
+};
+
 export default function Contact() {
   const [ref, isInView] = useInView({ threshold: 0.15 });
   const [formData, setFormData] = useState({
@@ -20,6 +32,9 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [preview, setPreview] = useState(null);
 
+  // Para manjerar errores en las validaciones:
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -28,15 +43,29 @@ export default function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Sanitizar datos del formulario antes de procesarlos (prevención XSS)
-    const sanitizedData = {
-      name: escapeHtml(formData.name),
-      email: escapeHtml(formData.email),
-      message: escapeHtml(formData.message),
+    const newErrors = {
+      name: isRequired(formData.name) || minLength(formData.name, 3),
+      email: isRequired(formData.email) || isEmail(formData.email),
+      message: isRequired(formData.message) || minLength(formData.message, 10),
+    };
+
+    const hasErrors = Object.values(newErrors).filter(Boolean).length > 0;
+
+    if (hasErrors) {
+      setErrors(newErrors); // Mostramos los errores en pantalla
+      return;
+    }
+    setErrors({});
+
+    //Eliminamos el EscapeHTML porque React ya lo hace por defecto.
+    const ContactData = {
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
     };
 
     // Mostrar preview con datos sanitizados
-    setPreview(sanitizedData);
+    setPreview(ContactData);
     setSubmitted(true);
 
     // Reset después de 5 segundos
@@ -54,9 +83,8 @@ export default function Contact() {
       <div ref={ref} className="max-w-4xl mx-auto">
         {/* Section Header */}
         <div
-          className={`text-center mb-16 transition-all duration-700 ${
-            isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+          className={`text-center mb-16 transition-all duration-700 ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
         >
           <span className="text-sm font-semibold text-accent tracking-widest uppercase">
             Hablemos
@@ -70,11 +98,10 @@ export default function Contact() {
         <div className="grid md:grid-cols-5 gap-10">
           {/* Info Column */}
           <div
-            className={`md:col-span-2 transition-all duration-700 delay-200 ${
-              isInView
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-12"
-            }`}
+            className={`md:col-span-2 transition-all duration-700 delay-200 ${isInView
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 -translate-x-12"
+              }`}
           >
             <div className="glass rounded-2xl p-8 space-y-6">
               <div>
@@ -134,72 +161,54 @@ export default function Contact() {
 
           {/* Form Column */}
           <div
-            className={`md:col-span-3 transition-all duration-700 delay-300 ${
-              isInView
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 translate-x-12"
-            }`}
+            className={`md:col-span-3 transition-all duration-700 delay-300 ${isInView
+              ? "opacity-100 translate-x-0"
+              : "opacity-0 translate-x-12"
+              }`}
           >
             <div className="glass rounded-2xl p-8">
               {!submitted ? (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
-                    <label
-                      htmlFor="contact-name"
-                      className="block text-sm font-medium text-text-secondary mb-2"
-                    >
-                      Nombre
-                    </label>
+                    <label htmlFor="contact-name" className="block text-sm font-medium text-text-secondary mb-2">Nombre</label>
                     <input
                       id="contact-name"
                       type="text"
                       name="name"
-                      required
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Tu nombre"
                       className="w-full px-4 py-3 rounded-xl bg-surface-lighter/50 border border-white/10 text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 text-sm"
                     />
+                    <ErrorMessage message={errors.name} />
                   </div>
-
                   <div>
-                    <label
-                      htmlFor="contact-email"
-                      className="block text-sm font-medium text-text-secondary mb-2"
-                    >
-                      Email
-                    </label>
+                    <label htmlFor="contact-email" className="block text-sm font-medium text-text-secondary mb-2">Email</label>
                     <input
                       id="contact-email"
                       type="email"
                       name="email"
-                      required
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="tu@email.com"
                       className="w-full px-4 py-3 rounded-xl bg-surface-lighter/50 border border-white/10 text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 text-sm"
                     />
+                    <ErrorMessage message={errors.email} />
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="contact-message"
-                      className="block text-sm font-medium text-text-secondary mb-2"
-                    >
-                      Mensaje
-                    </label>
+                    <label htmlFor="contact-message" className="block text-sm font-medium text-text-secondary mb-2">Mensaje</label>
                     <textarea
                       id="contact-message"
                       name="message"
-                      required
                       rows="4"
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Escribe tu mensaje..."
                       className="w-full px-4 py-3 rounded-xl bg-surface-lighter/50 border border-white/10 text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 text-sm resize-none"
                     />
+                    <ErrorMessage message={errors.message} />
                   </div>
-
                   <button
                     type="submit"
                     id="contact-submit"
