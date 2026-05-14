@@ -1,16 +1,31 @@
-# React + Vite
+# Personal Portfolio - Wilmer Salazar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Hello! Welcome to the source code of my personal portfolio. This application is a Single Page Application (SPA) designed to showcase my projects, academic background, and technical skills, offering a smooth and modern user experience.
 
-Currently, two official plugins are available:
+## 🚀 Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+*   **Core:** React and Vite for rapid development and exceptional performance.
+*   **Styling:** Tailwind CSS for an aesthetic, modern, and 100% responsive design.
+*   **Security:** Implementation of XSS mitigation strategies to ensure the application is secure.
 
-## React Compiler
+## 🔌 Real-Time API Integration
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+To demonstrate my skills in connecting and consuming web services (and to give the page a special touch), this portfolio is connected to a **Stoic/Motivational Quotes API**. 
 
-## Expanding the ESLint configuration
+The application makes asynchronous requests to fetch real-time data, injecting dynamic quotes into the interface. This not only improves the user experience but also demonstrates proficiency in:
+*   Asynchronous requests (`fetch` / `Promises`).
+*   State management in React (`useState`, `useEffect`).
+*   Conditional rendering and error handling when interacting with third-party services.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ How to run this project locally
+
+1. Clone this repository to your local machine.
+2. Install dependencies by running:
+   ```bash
+   npm install
+   ```
+3. Start the local development server:
+   ```bash
+   npm run dev
+   ```
+4. Open your browser and visit the URL provided by Vite (usually `http://localhost:5173`).
