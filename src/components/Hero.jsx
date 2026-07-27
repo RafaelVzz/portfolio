@@ -1,5 +1,4 @@
 import { personalInfo } from "../data/portfolioData";
-import MotivationalQuote from "./MotivationalQuote";
 
 /**
  * Hero — Sección principal de bienvenida con animaciones y partículas decorativas.
@@ -104,8 +103,6 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Motivational Quote */}
-        <MotivationalQuote />
       </div>
 
       {/* Scroll Indicator */}
