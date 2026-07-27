@@ -1,7 +1,7 @@
 import { personalInfo } from "../data/portfolioData";
 
 /**
- * Hero — Sección principal de bienvenida con animaciones y partículas decorativas.
+ * Hero — Sección principal con layout asimétrico estilo editorial.
  */
 export default function Hero() {
   return (
@@ -9,110 +9,112 @@ export default function Hero() {
       id="inicio"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Animated Background Elements */}
+      {/* Atmospheric Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Orbs */}
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float" />
+        {/* Warm amber glow — top right */}
+        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-primary/6 rounded-full blur-[120px] animate-float" />
+        {/* Cool emerald glow — bottom left */}
         <div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/8 rounded-full blur-3xl animate-float"
-          style={{ animationDelay: "2s" }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 w-64 h-64 bg-primary-dark/10 rounded-full blur-3xl animate-float"
-          style={{ animationDelay: "4s" }}
+          className="absolute -bottom-48 -left-48 w-[600px] h-[600px] bg-accent/4 rounded-full blur-[140px] animate-float"
+          style={{ animationDelay: "3s" }}
         />
 
-        {/* Grid Pattern */}
+        {/* Diagonal grid — editorial feel */}
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(99,102,241,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.3) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
+              "linear-gradient(45deg, rgba(229,149,0,0.3) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
           }}
         />
+
+        {/* Decorative vertical line */}
+        <div className="absolute top-0 left-[15%] w-px h-full bg-gradient-to-b from-transparent via-primary/10 to-transparent hidden md:block" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-text-secondary mb-8 animate-fade-in-up">
-          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-          Disponible para proyectos
-        </div>
-
-        {/* Name */}
-        <h1
-          className="text-5xl md:text-7xl font-extrabold mb-4 animate-fade-in-up tracking-tight"
-          style={{ animationDelay: "0.2s" }}
-        >
-          Hola, soy{" "}
-          <span className="gradient-text">
-            {personalInfo.name}
-          </span>
-        </h1>
-
-        {/* Title */}
-        <p
-          className="text-xl md:text-2xl text-text-secondary mb-4 animate-fade-in-up font-light"
-          style={{ animationDelay: "0.4s" }}
-        >
-          {personalInfo.title}
-        </p>
-
-        {/* Subtitle */}
-        <p
-          className="text-lg text-accent-light font-medium mb-10 animate-fade-in-up"
-          style={{ animationDelay: "0.5s" }}
-        >
-          {personalInfo.subtitle}
-        </p>
-
-        {/* CTAs */}
-        <div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
-          style={{ animationDelay: "0.6s" }}
-        >
-          <a
-            href="#proyectos"
-            className="group relative px-8 py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/25"
+      {/* Content — asymmetric layout */}
+      <div className="relative z-10 px-6 max-w-5xl mx-auto w-full">
+        <div className="md:ml-[15%]">
+          {/* Terminal-style badge */}
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 text-sm font-mono-accent text-primary mb-8 animate-fade-in-up"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent animate-gradient" />
-            <span className="relative flex items-center gap-2">
-              Ver Proyectos
-              <svg
-                className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
+            <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+            <span className="text-text-secondary">status:</span> disponible
+          </div>
+
+          {/* Name — large editorial */}
+          <h1
+            className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 animate-fade-in-up tracking-tight leading-[0.95]"
+            style={{ animationDelay: "0.15s" }}
+          >
+            <span className="text-text-primary">Hola, soy</span>
+            <br />
+            <span className="gradient-text">
+              {personalInfo.name}
             </span>
-          </a>
-          <a
-            href="#contacto"
-            className="px-8 py-3.5 rounded-xl font-semibold text-text-primary glass hover:bg-white/10 transition-all duration-300 hover:scale-105"
-          >
-            Contáctame
-          </a>
-        </div>
+          </h1>
 
+          {/* Title — monospace accent */}
+          <p
+            className="text-lg md:text-xl text-text-secondary mb-3 animate-fade-in-up font-mono-accent font-light"
+            style={{ animationDelay: "0.3s" }}
+          >
+            {"// "}{personalInfo.title}
+          </p>
+
+          {/* Subtitle */}
+          <p
+            className="text-base md:text-lg text-accent-light font-medium mb-12 animate-fade-in-up"
+            style={{ animationDelay: "0.4s" }}
+          >
+            {personalInfo.subtitle}
+          </p>
+
+          {/* CTAs — asymmetric sizing */}
+          <div
+            className="flex flex-col sm:flex-row items-start gap-4 animate-fade-in-up"
+            style={{ animationDelay: "0.55s" }}
+          >
+            <a
+              href="#proyectos"
+              className="group relative px-8 py-3.5 rounded-lg font-semibold text-surface overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/20"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-light" />
+              <span className="relative flex items-center gap-2">
+                Ver Proyectos
+                <svg
+                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </span>
+            </a>
+            <a
+              href="#contacto"
+              className="px-8 py-3.5 rounded-lg font-semibold text-text-primary border border-surface-lighter hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
+            >
+              Contáctame
+            </a>
+          </div>
+        </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in-up opacity-60">
-        <span className="text-xs text-text-muted tracking-widest uppercase">
+      {/* Scroll Indicator — minimal */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in-up opacity-50">
+        <span className="text-xs text-text-muted tracking-[0.3em] uppercase font-mono-accent">
           Scroll
         </span>
-        <div className="w-6 h-10 border-2 border-text-muted rounded-full flex justify-center pt-2">
-          <div className="w-1.5 h-1.5 bg-text-muted rounded-full animate-bounce" />
-        </div>
+        <div className="w-px h-8 bg-gradient-to-b from-primary/60 to-transparent" />
       </div>
     </section>
   );

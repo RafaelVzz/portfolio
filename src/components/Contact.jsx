@@ -75,18 +75,18 @@ export default function Contact() {
       <div className="absolute top-0 left-0 right-0 section-divider" />
 
       <div ref={ref} className="max-w-4xl mx-auto">
-        {/* Section Header */}
+        {/* Section Header — editorial */}
         <div
-          className={`text-center mb-16 transition-all duration-700 ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          className={`mb-16 transition-all duration-700 ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
         >
-          <span className="text-sm font-semibold text-accent tracking-widest uppercase">
-            Hablemos
+          <span className="font-mono-accent text-xs font-semibold text-primary tracking-[0.25em] uppercase">
+            04 / Hablemos
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-3 mb-4">
             Ponte en <span className="gradient-text">Contacto</span>
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
+          <div className="w-16 h-0.5 bg-primary rounded-full" />
         </div>
 
         <div className="grid md:grid-cols-5 gap-10">
@@ -114,9 +114,9 @@ export default function Contact() {
                   href={sanitizeUrl(link.url)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-primary/10 transition-all duration-300 group"
+                  className="flex items-center gap-4 p-4 rounded-xl border border-surface-lighter hover:border-primary/25 hover:bg-primary/5 transition-all duration-300 group"
                 >
-                  <span className="w-10 h-10 rounded-lg bg-primary/15 flex items-center justify-center text-primary-light group-hover:scale-110 transition-transform">
+                  <span className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                     <svg
                       className="w-5 h-5"
                       fill="currentColor"
@@ -129,7 +129,7 @@ export default function Contact() {
                     <div className="font-semibold text-text-primary text-sm">
                       {link.name}
                     </div>
-                    <div className="text-xs text-text-muted">
+                    <div className="text-xs text-text-muted font-mono-accent">
                       @RafaelVzz
                     </div>
                   </div>
@@ -157,7 +157,7 @@ export default function Contact() {
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Tu nombre"
-                      className="w-full px-4 py-3 rounded-xl bg-surface-lighter/50 border border-white/10 text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 text-sm"
+                      className="w-full px-4 py-3 rounded-lg bg-surface-light border border-surface-lighter text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all duration-300 text-sm"
                     />
                     <ErrorMessage message={errors.name} />
                   </div>
@@ -170,7 +170,7 @@ export default function Contact() {
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="tu@email.com"
-                      className="w-full px-4 py-3 rounded-xl bg-surface-lighter/50 border border-white/10 text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 text-sm"
+                      className="w-full px-4 py-3 rounded-lg bg-surface-light border border-surface-lighter text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all duration-300 text-sm font-mono-accent"
                     />
                     <ErrorMessage message={errors.email} />
                   </div>
@@ -184,7 +184,7 @@ export default function Contact() {
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Escribe tu mensaje..."
-                      className="w-full px-4 py-3 rounded-xl bg-surface-lighter/50 border border-white/10 text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 text-sm resize-none"
+                      className="w-full px-4 py-3 rounded-lg bg-surface-light border border-surface-lighter text-text-primary placeholder-text-muted focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all duration-300 text-sm resize-none"
                     />
                     <ErrorMessage message={errors.message} />
                   </div>
@@ -192,9 +192,9 @@ export default function Contact() {
                     type="submit"
                     id="contact-submit"
                     disabled={status === "sending"}
-                    className="group relative w-full py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/25 disabled:opacity-70 disabled:hover:scale-100"
+                    className="group relative w-full py-3.5 rounded-lg font-semibold text-surface overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/20 disabled:opacity-70 disabled:hover:scale-100"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent animate-gradient" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary-light" />
                     <span className="relative flex items-center justify-center gap-2">
                       {status === "sending" ? (
                         <>
@@ -227,9 +227,9 @@ export default function Contact() {
                 </form>
               ) : status === "success" ? (
                 <div className="text-center py-8 animate-fade-in-up">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/15 flex items-center justify-center">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center">
                     <svg
-                      className="w-8 h-8 text-green-400"
+                      className="w-8 h-8 text-accent"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -251,7 +251,7 @@ export default function Contact() {
                 </div>
               ) : (
                 <div className="text-center py-8 animate-fade-in-up">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/15 flex items-center justify-center">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
                     <svg
                       className="w-8 h-8 text-red-400"
                       fill="none"

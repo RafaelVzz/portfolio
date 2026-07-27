@@ -13,7 +13,7 @@ export const personalInfo = {
   location: "Venezuela",
   yearsExperience: "1",
   about:
-    "Soy un apasionado estudiante de Ingeniería en Sistemas con un año de experiencia en desarrollo de software. Me especializo en la creación de soluciones tecnológicas que van desde aplicaciones de escritorio robustas hasta plataformas web completas. Mi enfoque combina la curiosidad por aprender nuevas tecnologías con la disciplina de aplicar buenas prácticas de desarrollo, incluyendo arquitectura en capas y patrones de diseño como SOLID. Estoy constantemente buscando nuevos desafíos que me permitan crecer como profesional y contribuir a proyectos con impacto real.",
+    "Soy un apasionado estudiante de Ingeniería en Sistemas con más de un año de experiencia en desarrollo de software. Me especializo en la creación de soluciones tecnológicas que van desde aplicaciones de escritorio robustas hasta plataformas web completas. Mi enfoque combina la curiosidad por aprender nuevas tecnologías con la disciplina de aplicar buenas prácticas de desarrollo. Estoy constantemente buscando nuevos desafíos que me permitan crecer como profesional y contribuir a proyectos con impacto real.",
 };
 
 export const skills = [

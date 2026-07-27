@@ -3,7 +3,7 @@ import { sanitizeUrl } from "../utils/sanitize";
 import { useInView } from "../hooks/useInView";
 
 /**
- * Projects — Sección de proyectos con tarjetas glassmorphism animadas.
+ * Projects — Sección de proyectos con tarjetas estilo editorial.
  */
 export default function Projects() {
   const [ref, isInView] = useInView({ threshold: 0.1 });
@@ -13,19 +13,19 @@ export default function Projects() {
       <div className="absolute top-0 left-0 right-0 section-divider" />
 
       <div ref={ref} className="max-w-6xl mx-auto">
-        {/* Section Header */}
+        {/* Section Header — editorial */}
         <div
-          className={`text-center mb-16 transition-all duration-700 ${
+          className={`mb-16 transition-all duration-700 ${
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
-          <span className="text-sm font-semibold text-accent tracking-widest uppercase">
-            Mi Trabajo
+          <span className="font-mono-accent text-xs font-semibold text-primary tracking-[0.25em] uppercase">
+            03 / Mi Trabajo
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-3 mb-4">
             Proyectos <span className="gradient-text">Destacados</span>
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full" />
+          <div className="w-16 h-0.5 bg-primary rounded-full" />
         </div>
 
         {/* Project Cards */}
@@ -33,13 +33,16 @@ export default function Projects() {
           {projects.map((project, i) => (
             <article
               key={project.id}
-              className={`group glass rounded-2xl overflow-hidden transition-all duration-700 hover:shadow-2xl hover:shadow-primary/15 hover:border-primary/30 hover:-translate-y-2 ${
+              className={`group glass rounded-2xl overflow-hidden card-hover hover:border-primary/20 transition-all duration-700 ${
                 isInView
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: isInView ? `${i * 150}ms` : "0ms" }}
             >
+              {/* Accent top border */}
+              <div className="h-0.5 w-full bg-gradient-to-r from-primary via-accent to-transparent" />
+
               {/* Card Header */}
               <div className="relative p-8 pb-0">
                 <div className="flex items-start justify-between mb-4">
@@ -48,7 +51,7 @@ export default function Projects() {
                     href={sanitizeUrl(project.repoUrl)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-white/5 text-text-muted hover:text-primary-light hover:bg-primary/10 transition-all duration-300"
+                    className="p-2 rounded-lg border border-surface-lighter text-text-muted hover:text-primary hover:border-primary/30 transition-all duration-300"
                     aria-label={`Ver repositorio de ${project.title}`}
                   >
                     <svg
@@ -67,7 +70,7 @@ export default function Projects() {
                   </a>
                 </div>
 
-                <h3 className="text-xl font-bold text-text-primary mb-3 group-hover:text-primary-light transition-colors duration-300">
+                <h3 className="text-xl font-bold text-text-primary mb-3 group-hover:text-primary transition-colors duration-300">
                   {project.title}
                 </h3>
 
@@ -82,7 +85,7 @@ export default function Projects() {
                   {project.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary-light border border-primary/20"
+                      className="px-3 py-1 text-xs font-mono-accent font-medium rounded-full border border-primary/20 text-primary"
                     >
                       {tech}
                     </span>
@@ -94,7 +97,7 @@ export default function Projects() {
                   href={sanitizeUrl(project.repoUrl)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:text-accent-light transition-colors duration-300 group/link"
+                  className="inline-flex items-center gap-2 text-sm font-medium font-mono-accent text-accent hover:text-accent-light transition-colors duration-300 group/link"
                 >
                   <svg
                     className="w-4 h-4"

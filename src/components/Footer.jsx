@@ -7,16 +7,18 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative py-10 px-6">
+    <footer className="relative py-12 px-6">
       <div className="section-divider mb-10" />
 
       <div className="max-w-6xl mx-auto text-center">
-        {/* Logo */}
+        {/* Logo — terminal style */}
         <a
           href="#inicio"
-          className="inline-block text-2xl font-bold gradient-text mb-4 hover:opacity-80 transition-opacity"
+          className="inline-block font-mono-accent text-xl font-bold mb-4 hover:opacity-80 transition-opacity"
         >
-          {"<WS />"}
+          <span className="text-primary">{">"}</span>
+          <span className="text-text-primary">WS</span>
+          <span className="text-primary animate-blink">_</span>
         </a>
 
         <p className="text-text-muted text-sm mb-6">
@@ -30,9 +32,8 @@ export default function Footer() {
           &copy; {currentYear} {personalInfo.name}. Todos los
           derechos reservados.
         </p>
-        <p className="text-text-muted/50 text-xs mt-2">
-          Construido con React + Vite + Tailwind CSS · Protección XSS con
-          DOMPurify
+        <p className="text-text-muted/40 text-xs mt-2 font-mono-accent">
+          React + Vite + Tailwind CSS
         </p>
       </div>
     </footer>
