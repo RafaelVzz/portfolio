@@ -1,16 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
 import { socialLinks } from "../data/portfolioData";
-import { escapeHtml, sanitizeUrl } from "../utils/sanitize";
+import { sanitizeUrl } from "../utils/sanitize";
 import { useInView } from "../hooks/useInView";
 import { isRequired, isEmail, minLength } from "../utils/validators";
-
-/**
- * Contact — Sección de contacto con formulario y prevención XSS.
- *
- * NOTA SOBRE XSS: Este formulario demuestra la sanitización de entrada
- * del usuario antes de mostrarla. En producción, todos los datos enviados
- * por el usuario también deberían sanitizarse en el backend.
- */
 
 const ErrorMessage = ({ message }) => {
   if (!message) return null;
@@ -24,15 +17,13 @@ const ErrorMessage = ({ message }) => {
 
 export default function Contact() {
   const [ref, isInView] = useInView({ threshold: 0.15 });
+  const formRef = useRef();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
-  const [submitted, setSubmitted] = useState(false);
-  const [preview, setPreview] = useState(null);
-
-  // Para manjerar errores en las validaciones:
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -40,7 +31,7 @@ export default function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {
@@ -52,28 +43,31 @@ export default function Contact() {
     const hasErrors = Object.values(newErrors).filter(Boolean).length > 0;
 
     if (hasErrors) {
-      setErrors(newErrors); // Mostramos los errores en pantalla
+      setErrors(newErrors);
       return;
     }
     setErrors({});
+    setStatus("sending");
 
-    //Eliminamos el EscapeHTML porque React ya lo hace por defecto.
-    const ContactData = {
-      name: formData.name,
-      email: formData.email,
-      message: formData.message,
-    };
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY }
+      );
 
-    // Mostrar preview con datos sanitizados
-    setPreview(ContactData);
-    setSubmitted(true);
-
-    // Reset después de 5 segundos
-    setTimeout(() => {
-      setSubmitted(false);
-      setPreview(null);
+      setStatus("success");
       setFormData({ name: "", email: "", message: "" });
-    }, 5000);
+
+      // Volver al formulario después de 5 segundos
+      setTimeout(() => setStatus("idle"), 5000);
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      setStatus("error");
+
+      setTimeout(() => setStatus("idle"), 5000);
+    }
   };
 
   return (
@@ -133,7 +127,7 @@ export default function Contact() {
                   </span>
                   <div>
                     <div className="font-semibold text-text-primary text-sm">
-                      {escapeHtml(link.name)}
+                      {link.name}
                     </div>
                     <div className="text-xs text-text-muted">
                       @RafaelVzz
@@ -141,21 +135,6 @@ export default function Contact() {
                   </div>
                 </a>
               ))}
-
-              {/* XSS Info Card */}
-              <div className="p-4 rounded-xl bg-accent/5 border border-accent/15">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-accent">🛡️</span>
-                  <span className="text-sm font-semibold text-accent-light">
-                    Protección XSS Activa
-                  </span>
-                </div>
-                <p className="text-xs text-text-muted leading-relaxed">
-                  Este formulario sanitiza todos los datos de entrada usando
-                  DOMPurify y escape de entidades HTML para prevenir ataques
-                  de Cross-Site Scripting.
-                </p>
-              </div>
             </div>
           </div>
 
@@ -167,8 +146,8 @@ export default function Contact() {
               }`}
           >
             <div className="glass rounded-2xl p-8">
-              {!submitted ? (
-                <form onSubmit={handleSubmit} className="space-y-5">
+              {status === "idle" || status === "sending" ? (
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
                   <div>
                     <label htmlFor="contact-name" className="block text-sm font-medium text-text-secondary mb-2">Nombre</label>
                     <input
@@ -212,28 +191,41 @@ export default function Contact() {
                   <button
                     type="submit"
                     id="contact-submit"
-                    className="group relative w-full py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/25"
+                    disabled={status === "sending"}
+                    className="group relative w-full py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/25 disabled:opacity-70 disabled:hover:scale-100"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent animate-gradient" />
                     <span className="relative flex items-center justify-center gap-2">
-                      Enviar Mensaje
-                      <svg
-                        className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                        />
-                      </svg>
+                      {status === "sending" ? (
+                        <>
+                          <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                          Enviando...
+                        </>
+                      ) : (
+                        <>
+                          Enviar Mensaje
+                          <svg
+                            className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                            />
+                          </svg>
+                        </>
+                      )}
                     </span>
                   </button>
                 </form>
-              ) : (
+              ) : status === "success" ? (
                 <div className="text-center py-8 animate-fade-in-up">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/15 flex items-center justify-center">
                     <svg
@@ -253,39 +245,33 @@ export default function Contact() {
                   <h3 className="text-xl font-bold text-text-primary mb-2">
                     ¡Mensaje Enviado!
                   </h3>
-                  <p className="text-text-secondary text-sm mb-6">
-                    Gracias por contactarme. Los datos fueron sanitizados antes
-                    de ser procesados.
+                  <p className="text-text-secondary text-sm">
+                    Gracias por contactarme. Te responderé lo antes posible.
                   </p>
-
-                  {/* Sanitized Preview */}
-                  {preview && (
-                    <div className="text-left glass rounded-xl p-5 mt-4">
-                      <h4 className="text-sm font-semibold text-accent-light mb-3 flex items-center gap-2">
-                        <span>🛡️</span> Vista previa sanitizada (XSS Safe):
-                      </h4>
-                      <div className="space-y-2 text-xs">
-                        <p>
-                          <span className="text-text-muted">Nombre: </span>
-                          <span className="text-text-primary">
-                            {preview.name}
-                          </span>
-                        </p>
-                        <p>
-                          <span className="text-text-muted">Email: </span>
-                          <span className="text-text-primary">
-                            {preview.email}
-                          </span>
-                        </p>
-                        <p>
-                          <span className="text-text-muted">Mensaje: </span>
-                          <span className="text-text-primary">
-                            {preview.message}
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                </div>
+              ) : (
+                <div className="text-center py-8 animate-fade-in-up">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/15 flex items-center justify-center">
+                    <svg
+                      className="w-8 h-8 text-red-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-text-primary mb-2">
+                    Error al enviar
+                  </h3>
+                  <p className="text-text-secondary text-sm">
+                    Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo.
+                  </p>
                 </div>
               )}
             </div>
