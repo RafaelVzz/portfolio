@@ -56,7 +56,7 @@ export default function About() {
               </p>
 
               {/* Quick Info */}
-              <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-primary">📍</span>
                   <span className="text-text-muted">Ubicación:</span>
