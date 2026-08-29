@@ -40,8 +40,8 @@ export default function Hero() {
           <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 text-sm font-mono-accent text-primary mb-8 animate-fade-in-up"
           >
-            <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-            <span className="text-text-secondary">status:</span> disponible
+            <span className="status-dot" />
+            <span className="text-text-secondary">status:</span> ocupado
           </div>
 
           {/* Name — large editorial */}
